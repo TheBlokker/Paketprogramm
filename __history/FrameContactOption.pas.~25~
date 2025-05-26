@@ -1,0 +1,82 @@
+unit FrameContactOption;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
+  Vcl.StdCtrls,
+  Vcl.Imaging.pngimage;
+
+type
+  TFrame1 = class(TFrame)
+    Panel1: TPanel;
+    Image1: TImage;
+    Label1: TLabel;
+    Panel2: TPanel;
+    Image2: TImage;
+    Label2: TLabel;
+    Panel3: TPanel;
+    Image3: TImage;
+    Label3: TLabel;
+    Label4: TLabel;
+    procedure Panel1Click(Sender: TObject);
+    procedure Panel2Click(Sender: TObject);
+    procedure Panel3Click(Sender: TObject);
+    procedure PanelNormalBorder();
+    procedure FrameEnter(Sender: TObject);
+  private
+    { Private-Deklarationen }
+  public
+    { Public-Deklarationen }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+uses SetupContact;
+
+procedure TFrame1.PanelNormalBorder;
+begin
+  //
+  Panel1.BorderStyle := bsNone;
+  Panel2.BorderStyle := bsNone;
+  Panel3.BorderStyle := bsNone;
+end;
+
+procedure TFrame1.FrameEnter(Sender: TObject);
+begin
+  //
+
+end;
+
+procedure TFrame1.Panel1Click(Sender: TObject);
+begin
+  //
+  PanelNormalBorder();
+  Panel1.BorderStyle := bsSingle;
+  Panel1.BorderWidth := 2;
+  Form2.AllowToForward();
+end;
+
+procedure TFrame1.Panel2Click(Sender: TObject);
+begin
+  //
+  PanelNormalBorder();
+  Panel2.BorderStyle := bsSingle;
+  Panel2.BorderWidth := 2;
+  Form2.AllowToForward();
+end;
+
+procedure TFrame1.Panel3Click(Sender: TObject);
+begin
+  //
+  PanelNormalBorder();
+  Panel3.BorderStyle := bsSingle;
+  Panel3.BorderWidth := 2;
+  Form2.AllowToForward();
+end;
+
+end.

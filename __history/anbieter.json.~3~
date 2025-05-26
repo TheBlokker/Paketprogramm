@@ -1,0 +1,22 @@
+{
+  "sendungen": [
+    {
+      "anbieter": "DHL",
+      "typ": "Paket",
+      "größenregel": "volumen",
+      "maße_cm": { "länge": 60, "breite": 40, "höhe": 30 },
+      "max_gewicht_kg": 10,
+      "preis_euro": 7.49,
+      "optionen": [
+        {
+          "name": "Einschreiben",
+          "aufpreis_euro": 2.50
+        },
+        {
+          "name": "Express",
+          "aufpreis_euro": 9.00
+        }
+      ]
+    }
+  ]
+}

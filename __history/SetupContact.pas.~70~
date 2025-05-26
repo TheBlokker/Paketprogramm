@@ -1,0 +1,247 @@
+unit SetupContact;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FrameContactOption, Vcl.StdCtrls,
+  FrameContactCustome;
+
+type
+  TForm2 = class(TForm)
+    ButtonNext: TButton;
+    ButtonBack: TButton;
+    Button3: TButton;
+    Frame11: TFrame1;
+    Frame21: TFrame2;
+    GroupBox1: TGroupBox;
+    EditAbsenderAnrede: TEdit;
+    EditAbsenderName: TEdit;
+    EditAbsenderStraﬂe: TEdit;
+    EditAbsenderAdressInfo: TEdit;
+    EditAbsenderPLZ: TEdit;
+    EditAbsenderOrt: TEdit;
+    ComboBox1: TComboBox;
+    OpenDialog1: TOpenDialog;
+    procedure Button3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure AllowToForward();
+    procedure ButtonNextClick(Sender: TObject);
+    procedure LadeUndZeigeKontakt(const DateiName: string);
+  private
+    { Private-Deklarationen }
+  public
+    { Public-Deklarationen }
+  end;
+
+var
+  Form2: TForm2;
+  AllowedToForward: boolean;
+  SelectedOption, Step: integer;
+  EMPorSEN: integer;
+
+implementation
+
+{$R *.dfm}
+
+uses vCardParser, Main;
+
+procedure TForm2.AllowToForward();
+begin
+  //
+  AllowedToForward := true;
+  ButtonNext.Enabled := true;
+end;
+
+procedure TForm2.Button3Click(Sender: TObject);
+begin
+  Self.Close;
+end;
+
+procedure TForm2.ButtonNextClick(Sender: TObject);
+var HasMadCoustome : boolean;
+begin
+ HasMadCoustome := False;
+  case Step of
+    0:
+      begin
+        case SelectedOption of
+          - 1:
+            begin
+              Frame11.PanelNormalBorder;
+              AllowedToForward := false;
+              ButtonNext.Enabled := false;
+            end;
+          0:
+            begin
+              // Deactive Cause
+              raise Exception.Create('Windows 11 das Feature nicht.');
+            end;
+          1:
+            begin
+              {vCard}
+              Frame11.Visible := false;
+              // Deactivate Next and Activate Back
+              ButtonNext.Enabled := false;
+              ButtonBack.Enabled := true;
+              // Next Frame Visable
+              OpenDialog1.InitialDir := GetCurrentDir;
+              if OpenDialog1.Execute then
+              begin
+                LadeUndZeigeKontakt(OpenDialog1.FileName);
+                // Deactivate Next and Activate Back
+                ButtonNext.Enabled := true;
+                ButtonNext.Caption := 'Fertig';
+                ButtonBack.Enabled := true;
+                // Aktiviere "Weiter", da Daten geladen wurden (optional)
+                AllowToForward();
+                GroupBox1.Visible := true;
+                Step := 2;
+                // Weiter zum n‰chsten Schritt (oder je nachdem, was als N‰chstes kommt)
+              end;
+                GroupBox1.Visible := true;
+                Step := 2;
+              // Deactivate Next and Activate Back
+              ButtonNext.Enabled := true;
+              ButtonBack.Enabled := true;
+
+            end;
+          2:
+            begin
+            {maunal}
+
+              Frame11.Visible := false;
+              // Next Frame Visable
+              Frame21.Visible := true;
+
+              if not HasMadCoustome then begin
+                HasMadCoustome := true;
+              end
+              else begin
+              EditAbsenderName.Text := Frame21.Edit2.Text + ' ' +
+              Frame21.Edit2.Text + ' - ' + Frame21.Edit3.Text;
+              EditAbsenderStraﬂe.Text := Frame21.EditAbsenderStraﬂe.Text;
+              EditAbsenderPLZ.Text := Frame21.EditAbsenderPLZ.Text;
+              EditAbsenderOrt.Text := Frame21.EditAbsenderOrt.Text;
+              EditAbsenderOrt.Text := Frame21.EditAbsenderOrt.Text;
+              Step := 1;
+              GroupBox1.Visible := true;
+              Frame21.Visible := false;
+              end;
+
+
+
+              // Deactivate Next and Activate Back
+              ButtonNext.Enabled := true;
+              ButtonBack.Enabled := true;
+            end;
+
+        end;
+      end;
+ 1:
+      begin
+        { Absender }
+        if EMPorSEN = 1 then
+        begin
+          Form1.EditAbsenderAnrede.Text := EditAbsenderAnrede.Text;
+          Form1.EditAbsenderName.Text := EditAbsenderName.Text;
+          Form1.EditAbsenderStraﬂe.Text := EditAbsenderStraﬂe.Text;
+          Form1.EditAbsenderPLZ.Text := EditAbsenderPLZ.Text;
+          Form1.EditAbsenderOrt.Text := EditAbsenderOrt.Text;
+          Close;
+        end
+        else if EMPorSEN = 2 then // Use else if for clarity and efficiency
+        begin
+          Form1.EditEmpfaengerAnrede.Text := EditAbsenderAnrede.Text; // Assign the Text value
+          Form1.EditEmpfaengerName.Text := EditAbsenderName.Text;     // Assign the Text value
+          Form1.EditEmpfaengerStraﬂe.Text := EditAbsenderStraﬂe.Text; // Assign the Text value
+          Form1.EditEmpfaengerPLZ.Text := EditAbsenderPLZ.Text;       // Assign the Text value
+          Form1.EditEmpfaengerOrt.Text := EditAbsenderOrt.Text;       // Assign the Text value
+          Close;
+        end;
+      end;
+    2:
+      begin
+        { Absender }
+        if EMPorSEN = 1 then
+        begin
+          Form1.EditAbsenderAnrede.Text := EditAbsenderAnrede.Text;
+          Form1.EditAbsenderName.Text := EditAbsenderName.Text;
+          Form1.EditAbsenderStraﬂe.Text := EditAbsenderStraﬂe.Text;
+          Form1.EditAbsenderPLZ.Text := EditAbsenderPLZ.Text;
+          Form1.EditAbsenderOrt.Text := EditAbsenderOrt.Text;
+          Close;
+        end
+        else if EMPorSEN = 2 then // Use else if for clarity and efficiency
+        begin
+          Form1.EditEmpfaengerAnrede.Text := EditAbsenderAnrede.Text; // Assign the Text value
+          Form1.EditEmpfaengerName.Text := EditAbsenderName.Text;     // Assign the Text value
+          Form1.EditEmpfaengerStraﬂe.Text := EditAbsenderStraﬂe.Text; // Assign the Text value
+          Form1.EditEmpfaengerPLZ.Text := EditAbsenderPLZ.Text;       // Assign the Text value
+          Form1.EditEmpfaengerOrt.Text := EditAbsenderOrt.Text;       // Assign the Text value
+          Close;
+        end;
+      end;
+  end;
+
+end;
+
+procedure TForm2.LadeUndZeigeKontakt(const DateiName: string);
+var
+  Kontakte: TArray<TKontakt>;
+begin
+  Kontakte := TVCardParser.LadeKontakteAusDatei(DateiName);
+  if Length(Kontakte) > 0 then
+  begin
+    // den ersten Kontakt
+    EditAbsenderName.Text := Kontakte[0].Name;
+    // Es gibt kein direktes Feld f¸r Anrede im TKontakt-Record.
+    // Entweder die Anrede ggf. aus dem Namen extrahieren oder
+    // ein weiteres Feld im TKontakt-Record hinzuf¸gen und die
+    // Parsing-Logik in vCardParser.pas erweitern.
+    EditAbsenderStraﬂe.Text := Kontakte[0].Strasse;
+    EditAbsenderPLZ.Text := Kontakte[0].PLZ;
+    EditAbsenderOrt.Text := Kontakte[0].Stadt;
+    // EditAbsenderAdressInfo wird im TKontakt nicht direkt gef¸llt.
+    //
+  end
+  else
+  begin
+    ShowMessage('Keine Kontakte in der ausgew‰hlten Datei gefunden.');
+    // Leere die Felder, falls keine Kontakte vorhanden sind
+    EditAbsenderName.Clear;
+    EditAbsenderStraﬂe.Clear;
+    EditAbsenderPLZ.Clear;
+    EditAbsenderOrt.Clear;
+    EditAbsenderAdressInfo.Clear;
+  end;
+end;
+
+procedure TForm2.FormShow(Sender: TObject);
+begin
+  //
+  Frame11.Visible := true;
+  Frame11.PanelNormalBorder;
+  AllowedToForward := false;
+  ButtonNext.Enabled := false;
+  ButtonBack.Enabled := false;
+  SelectedOption := -1;
+  Frame21.Edit1.Clear;
+  Frame21.Edit2.Clear;
+  Frame21.Edit3.Clear;
+  Frame21.EditAbsenderStraﬂe.Clear;
+  Frame21.EditAbsenderPLZ.Clear;
+  Frame21.EditAbsenderOrt.Clear;
+  Step := 0;
+  Frame21.Visible := false;
+  GroupBox1.Visible := false;
+  EditAbsenderAnrede.Clear;
+  EditAbsenderAnrede.Clear;
+  EditAbsenderAnrede.Clear;
+  EditAbsenderAnrede.Clear;
+  EditAbsenderAnrede.Clear;
+  ButtonNext.Caption := 'Weiter';
+end;
+
+end.

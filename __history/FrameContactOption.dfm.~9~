@@ -1,0 +1,70 @@
+object Frame1: TFrame1
+  Left = 0
+  Top = 0
+  Width = 541
+  Height = 290
+  TabOrder = 0
+  object Panel1: TPanel
+    Left = 40
+    Top = 24
+    Width = 417
+    Height = 73
+    Cursor = crHandPoint
+    TabOrder = 0
+    object Image1: TImage
+      Left = 55
+      Top = 8
+      Width = 57
+      Height = 57
+    end
+    object Label1: TLabel
+      Left = 136
+      Top = 8
+      Width = 158
+      Height = 15
+      Caption = 'Windows Kontakte ausw'#228'hlen'
+    end
+  end
+  object Panel2: TPanel
+    Left = 40
+    Top = 103
+    Width = 417
+    Height = 73
+    Cursor = crHandPoint
+    TabOrder = 1
+    object Image2: TImage
+      Left = 55
+      Top = 8
+      Width = 57
+      Height = 57
+    end
+    object Label2: TLabel
+      Left = 136
+      Top = 8
+      Width = 109
+      Height = 15
+      Caption = 'Kontakt Datei '#246'ffnen'
+    end
+  end
+  object Panel3: TPanel
+    Left = 40
+    Top = 182
+    Width = 417
+    Height = 73
+    Cursor = crHandPoint
+    TabOrder = 2
+    object Image3: TImage
+      Left = 56
+      Top = 8
+      Width = 58
+      Height = 57
+    end
+    object Label3: TLabel
+      Left = 136
+      Top = 8
+      Width = 173
+      Height = 15
+      Caption = 'Manuell Kontakt Daten eingeben'
+    end
+  end
+end

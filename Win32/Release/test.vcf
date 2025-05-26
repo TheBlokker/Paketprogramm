@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Göring;Timm Johannes;;;
+FN:Timm Johannes Göring
+TEL;TYPE=CELL:
+EMAIL;TYPE=HOME:
+ADR;TYPE=HOME:;;
+ORG:
+TITLE:
+NOTE:Test.
+END:VCARD

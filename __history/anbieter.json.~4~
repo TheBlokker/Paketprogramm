@@ -1,0 +1,148 @@
+{
+  "sendungen": [
+    {
+      "anbieter": "Deutsche Post",
+      "typ": "Postkarte",
+      "name": "Postkarte",
+      "preis_euro": 0.95,
+      "mass_cm": {
+        "laenge_min": 14,
+        "laenge_max": 23.5,
+        "breite_min": 9,
+        "breite_max": 12.5,
+        "hoehe_max": 0.2
+      },
+      "max_gewicht_g": 20,
+      "optionen": {
+        "express": 1.50,
+        "einschreiben": 2.50
+      }
+    },
+    {
+      "anbieter": "Deutsche Post",
+      "typ": "Brief",
+      "name": "Standardbrief",
+      "preis_euro": 0.95,
+      "mass_cm": {
+        "laenge_min": 14,
+        "laenge_max": 23.5,
+        "breite_min": 9,
+        "breite_max": 12.5,
+        "hoehe_max": 0.5
+      },
+      "max_gewicht_g": 20,
+      "optionen": {
+        "express": 1.50,
+        "einschreiben": 2.50
+      }
+    },
+    {
+      "anbieter": "Deutsche Post",
+      "typ": "Brief",
+      "name": "Kompaktbrief",
+      "preis_euro": 1.10,
+      "mass_cm": {
+        "laenge_min": 10,
+        "laenge_max": 23.5,
+        "breite_min": 7,
+        "breite_max": 12.5,
+        "hoehe_max": 1.0
+      },
+      "max_gewicht_g": 50,
+      "optionen": {
+        "express": 1.80,
+        "einschreiben": 2.50
+      }
+    },
+    {
+      "anbieter": "Deutsche Post",
+      "typ": "Brief",
+      "name": "Großbrief",
+      "preis_euro": 1.80,
+      "mass_cm": {
+        "laenge_min": 10,
+        "laenge_max": 35.3,
+        "breite_min": 7,
+        "breite_max": 25.0,
+        "hoehe_max": 2.0
+      },
+      "max_gewicht_g": 500,
+      "optionen": {
+        "express": 2.50,
+        "einschreiben": 3.50
+      }
+    },
+    {
+      "anbieter": "Deutsche Post",
+      "typ": "Brief",
+      "name": "Maxibrief",
+      "preis_euro": 2.90,
+      "mass_cm": {
+        "laenge_min": 10,
+        "laenge_max": 35.3,
+        "breite_min": 7,
+        "breite_max": 25.0,
+        "hoehe_max": 5.0
+      },
+      "max_gewicht_g": 1000,
+      "optionen": {
+        "express": 3.50,
+        "einschreiben": 4.00
+      }
+    },
+    {
+      "anbieter": "Hermes",
+      "typ": "Versandtasche",
+      "name": "Versandtasche",
+      "preis_euro": 3.79,
+      "mass_cm": {
+        "laenge_min": 10,
+        "laenge_max": 40.0,
+        "breite_min": 10,
+        "breite_max": 30.0,
+        "hoehe_max": 5.0
+      },
+      "max_gewicht_g": 1000,
+      "optionen": {
+        "express": 2.50,
+        "einschreiben": 3.00
+      }
+    },
+    {
+      "anbieter": "DHL",
+      "typ": "Paket",
+      "name": "Karton",
+      "preis_euro": 5.49,
+      "mass_cm": {
+        "laenge_min": 15,
+        "laenge_max": 60.0,
+        "breite_min": 11,
+        "breite_max": 35.0,
+        "hoehe_max": 35.0
+      },
+      "max_gewicht_g": 2000,
+      "optionen": {
+        "express": 4.00,
+        "einschreiben": 5.00
+      }
+    },
+    {
+      "anbieter": "GLS",
+      "typ": "Sonderformat",
+      "name": "Sonderformat",
+      "preis_euro": 9.99,
+      "mass_cm": {
+        "laenge_min": 10,
+        "laenge_max": 120.0,
+        "breite_min": 10,
+        "breite_max": 60.0,
+        "hoehe_max": 60.0
+      },
+      "max_gewicht_g": 4000,
+      "optionen": {
+        "express": 6.00,
+        "einschreiben": 7.00
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+unit FrameContactCustome;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TFrame2 = class(TFrame)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    EditAbsenderPLZ: TEdit;
+    EditAbsenderOrt: TEdit;
+    EditAbsenderStraﬂe: TEdit;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+  private
+    { Private-Deklarationen }
+  public
+    { Public-Deklarationen }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,104 @@
+﻿unit Worker;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, System.JSON, System.IOUtils, Math;
+
+type
+  TWorker = class
+  public
+    procedure PrüfeSendung(L, B, H, Gewicht: Double; Express, Einschreiben: Boolean);
+  end;
+
+implementation
+
+procedure TWorker.PrüfeSendung(L, B, H, Gewicht: Double; Express, Einschreiben: Boolean);
+var
+  JsonStr: string;
+  Json: TJSONObject;
+  Sendungen: TJSONArray;
+  Sendung, Maße, Optionen: TJSONObject;
+  I: Integer;
+  LängeMin, LängeMax, BreiteMin, BreiteMax, HöheMax, MaxGewicht: Double;
+  Typ, Anbieter, ProduktName: string;
+  Preis: Double;
+  Seiten: TArray<Double>;
+  MinSeite, MaxSeite: Double;
+begin
+  JsonStr := TFile.ReadAllText('produkte.json');
+  Json := TJSONObject.ParseJSONValue(JsonStr) as TJSONObject;
+  Sendungen := Json.GetValue<TJSONArray>('sendungen');
+
+  for I := 0 to Sendungen.Count - 1 do
+  begin
+    Sendung := Sendungen.Items[I] as TJSONObject;
+    Typ := Sendung.GetValue<string>('typ');
+    Anbieter := Sendung.GetValue<string>('anbieter');
+    ProduktName := Sendung.GetValue<string>('name');
+    Maße := Sendung.GetValue<TJSONObject>('maß_cm');
+    Optionen := Sendung.GetValue<TJSONObject>('optionen');
+
+    LängeMin := Maße.GetValue<Double>('länge_min');
+    LängeMax := Maße.GetValue<Double>('länge_max');
+    BreiteMin := Maße.GetValue<Double>('breite_min');
+    BreiteMax := Maße.GetValue<Double>('breite_max');
+    HöheMax := Maße.GetValue<Double>('höhe_max');
+    MaxGewicht := Sendung.GetValue<Double>('max_gewicht_g');
+
+    // Wenn Anbieter Hermes/GLS ist, berücksichtige nur die längste und kürzeste Seite
+    if (Anbieter = 'Hermes') or (Anbieter = 'GLS') then
+    begin
+      // Bestimme die größte und kleinste Seite
+      Seiten := [L, B, H];
+      MinSeite := Min(Min(Seiten[0], Seiten[1]), Seiten[2]);
+      MaxSeite := Max(Max(Seiten[0], Seiten[1]), Seiten[2]);
+
+      // Vergleiche mit den erlaubten Maßen
+      if (MaxSeite >= LängeMin) and (MinSeite >= BreiteMin) and (Gewicht <= MaxGewicht) then
+      begin
+        Preis := Sendung.GetValue<Double>('preis_euro');
+
+        if Express then
+          Preis := Preis + Optionen.GetValue<Double>('express');
+
+        if Einschreiben then
+          Preis := Preis + Optionen.GetValue<Double>('einschreiben');
+
+        Writeln('✅ Anbieter: ', Anbieter);
+        Writeln('📦 Produkt: ', ProduktName);
+        Writeln('📦 Typ: ', Typ);
+        Writeln('💶 Preis: ', FormatFloat('0.00', Preis), ' €');
+        Writeln('---');
+      end;
+    end
+    else
+    begin
+      // Für alle anderen Anbieter bleibt die Standardberechnung
+      if (L >= LängeMin) and (L <= LängeMax) and
+         (B >= BreiteMin) and (B <= BreiteMax) and
+         (H <= HöheMax) and
+         (Gewicht <= MaxGewicht) then
+      begin
+        Preis := Sendung.GetValue<Double>('preis_euro');
+
+        if Express then
+          Preis := Preis + Optionen.GetValue<Double>('express');
+
+        if Einschreiben then
+          Preis := Preis + Optionen.GetValue<Double>('einschreiben');
+
+        Writeln('✅ Anbieter: ', Anbieter);
+        Writeln('📦 Produkt: ', ProduktName);
+        Writeln('📦 Typ: ', Typ);
+        Writeln('💶 Preis: ', FormatFloat('0.00', Preis), ' €');
+        Writeln('---');
+      end;
+    end;
+  end;
+
+  Json.Free;
+end;
+
+end.
+

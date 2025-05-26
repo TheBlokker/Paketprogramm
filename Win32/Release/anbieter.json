@@ -1,0 +1,286 @@
+﻿{
+  "sendungen": [
+    {
+      "anbieter": "DHL",
+      "name": "Päckchen S",
+      "preis_euro": 4.19,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 35,
+        "breite_min": 0,
+        "breite_max": 25,
+        "hoehe_max": 10
+      },
+      "max_gewicht_g": 2000,
+      "optionen": {
+        "express": 11.81
+      }
+    },
+    {
+      "anbieter": "DHL",
+      "name": "Päckchen M",
+      "preis_euro": 5.19,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 60,
+        "breite_min": 0,
+        "breite_max": 30,
+        "hoehe_max": 15
+      },
+      "max_gewicht_g": 2000,
+      "optionen": {
+        "express": 10.81
+      }
+    },
+    {
+      "anbieter": "DHL",
+      "name": "2kg - Paket",
+      "preis_euro": 6.19,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 60,
+        "breite_min": 0,
+        "breite_max": 30,
+        "hoehe_max": 15
+      },
+      "max_gewicht_g": 2000,
+      "optionen": {
+        "express": 9.81
+      }
+    },
+    {
+      "anbieter": "DHL",
+      "name": "5kg - Paket",
+      "preis_euro": 7.69,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 120,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_gewicht_g": 5000,
+      "optionen": {
+        "express": 9.31
+      }
+    },
+    {
+      "anbieter": "DHL",
+      "name": "10kg - Paket",
+      "preis_euro": 10.49,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 120,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_gewicht_g": 10000,
+      "optionen": {
+        "express":  18.01
+      }
+    },
+    {
+      "anbieter": "DHL",
+      "name": "20kg - Paket",
+      "preis_euro": 18.99,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 120,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_gewicht_g": 20000,
+      "optionen": {
+        "express":  15.01
+      }
+    },
+    {
+      "anbieter": "DHL",
+      "name": "31,5kg - Paket",
+      "preis_euro": 23.99,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 120,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_gewicht_g": 31500,
+      "optionen": {
+        "express":  36.49
+      }
+    },
+    {
+      "anbieter": "Hermes",
+      "name": "Hermes Päckchen",
+      "preis_euro": 4.95,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_summe_laengste_kuerzeste": 37,
+      "max_gewicht_g": 25000,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "Hermes",
+      "name": "S-Paket",
+      "preis_euro": 6.45,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_summe_laengste_kuerzeste": 50,
+      "max_gewicht_g": 25000,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "Hermes",
+      "name": "M-Paket",
+      "preis_euro": 7.95,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_summe_laengste_kuerzeste": 80,
+      "max_gewicht_g": 25000,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "Hermes",
+      "name": "L-Paket",
+      "preis_euro": 11.95,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_summe_laengste_kuerzeste": 120,
+      "max_gewicht_g": 25000,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "Hermes",
+      "name": "XL-Paket",
+      "preis_euro": 28.99,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_summe_laengste_kuerzeste": 150,
+      "max_gewicht_g": 31500,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "GLS",
+      "name": "XS",
+      "preis_euro": 5.00,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 0
+      },
+      "max_gewicht_g": 40000,
+      "max_summe_laengste_kuerzeste": 35,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "GLS",
+      "name": "S",
+      "preis_euro": 6.50,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_gewicht_g": 40000,
+      "max_summe_laengste_kuerzeste": 50,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "GLS",
+      "name": "M",
+      "preis_euro": 7.70,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_gewicht_g": 40000,
+      "max_summe_laengste_kuerzeste": 70,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "GLS",
+      "name": "L",
+      "preis_euro": 12.00,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_gewicht_g": 40000,
+      "max_summe_laengste_kuerzeste": 90,
+      "optionen": {
+        "express": 0
+      }
+    },
+    {
+      "anbieter": "GLS",
+      "name": "XL",
+      "preis_euro": 22.00,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 500000,
+        "breite_min": 0,
+        "breite_max": 500000,
+        "hoehe_max": 500000
+      },
+      "max_gewicht_g": 40000,
+      "max_summe_laengste_kuerzeste": 300,
+      "optionen": {
+        "express": 0
+      }
+    }
+  ]
+}
