@@ -88,16 +88,23 @@ object AboutBox: TAboutBox
     object Label1: TLabel
       Left = 216
       Top = 16
-      Width = 32
+      Width = 28
       Height = 13
-      Caption = 'Label1'
+      Caption = 'Paket'
     end
     object Label2: TLabel
       Left = 216
       Top = 40
-      Width = 32
+      Width = 15
       Height = 13
-      Caption = 'Label2'
+      Caption = '1.0'
+    end
+    object Label3: TLabel
+      Left = 216
+      Top = 80
+      Width = 62
+      Height = 13
+      Caption = 'Timm G'#246'ring '
     end
   end
   object OKButton: TButton

@@ -4724,13 +4724,6 @@ object Form3: TForm3
       03E9D19CA1C40000000049454E44AE426082}
     Stretch = True
   end
-  object Label2: TLabel
-    Left = 150
-    Top = 412
-    Width = 157
-    Height = 15
-    Caption = 'DPD ist leider nicht verf'#252'gbar.'
-  end
   object Button1: TButton
     Left = 8
     Top = 408

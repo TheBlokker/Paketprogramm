@@ -1,0 +1,528 @@
+﻿unit Main;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Vcl.StdCtrls, Vcl.ComCtrls,
+  System.ImageList, Vcl.ImgList, About, System.Beacon, System.Bluetooth,
+  System.Beacon.Components, Math, Vcl.Grids, Generics.Collections,
+  System.IOUtils, Vcl.Imaging.jpeg, Vcl.Imaging.pngimage,
+  Vcl.BaseImageCollection, Vcl.ImageCollection, Printers, Barcode;
+
+type
+  TForm1 = class(TForm)
+    MainMenu1: TMainMenu;
+    Versand1: TMenuItem;
+    Extras1: TMenuItem;
+    EditAbsenderName: TEdit;
+    Label1: TLabel;
+    GroupBox1: TGroupBox;
+    EditAbsenderAnrede: TEdit;
+    GroupBox2: TGroupBox;
+    EditAbsenderStraße: TEdit;
+    EditAbsenderAdressInfo: TEdit;
+    EditAbsenderPLZ: TEdit;
+    EditAbsenderOrt: TEdit;
+    EditEmpfaengerAdressInfo: TEdit;
+    EditEmpfaengerAnrede: TEdit;
+    EditEmpfaengerName: TEdit;
+    EditEmpfaengerOrt: TEdit;
+    EditEmpfaengerPLZ: TEdit;
+    EditEmpfaengerStraße: TEdit;
+    ComboBox1: TComboBox;
+    ComboBox2: TComboBox;
+    GroupBox3: TGroupBox;
+    VersandeinesPaktesstarten1: TMenuItem;
+    ImageList: TImageList;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    EditGewicht: TEdit;
+    EditLaegne: TEdit;
+    EditBreite: TEdit;
+    Label8: TLabel;
+    EditHoehe: TEdit;
+    Label9: TLabel;
+    CheckBoxExpress: TCheckBox;
+    Label10: TLabel;
+    About: TMenuItem;
+    N1: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    est1: TMenuItem;
+    ButtonAbsenderKontaktSetup: TButton;
+    Button2: TButton;
+    StartBTN: TButton;
+    BalloonHint1: TBalloonHint;
+    ListView1: TListView;
+    Label11: TLabel;
+    Label12: TLabel;
+    ButtonPrint: TButton;
+    PrintDialog1: TPrintDialog;
+    procedure M_CheckForPossible();
+    procedure M_MakeItAllDisabledObject();
+    procedure M_MakeBriefEnabledObject();
+    procedure AboutClick(Sender: TObject);
+    procedure ButtonAbsenderKontaktSetupClick(Sender: TObject);
+    procedure EditGewichtKeyPress(Sender: TObject; var Key: Char);
+    procedure StartBTNClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ButtonPrintClick(Sender: TObject);
+    procedure PrintPackageSlip(SenderName, SenderAddress, SenderZipCode,
+      SenderCity, RecipientName, RecipientAddress, RecipientZipCode,
+      RecipientCity, TrackingNumber, DeliveryService, PackageWeight, PackageType: string);
+    procedure VersandeinesPaktesstarten1Click(Sender: TObject);
+  private
+    { Private-Deklarationen }
+  public
+    { Public-Deklarationen }
+    procedure ZeigePassendeAngeboteMitLogosInListView(L, B, H, Gewicht: Double;
+      Express, Einschreiben: Boolean);
+  end;
+
+var
+  Form1: TForm1;
+  CnGoForward: Boolean;
+
+implementation
+
+{$R *.dfm}
+
+uses SetupContact, Worker;
+
+procedure TForm1.PrintPackageSlip(SenderName, SenderAddress, SenderZipCode,
+  SenderCity, RecipientName, RecipientAddress, RecipientZipCode, RecipientCity,
+  TrackingNumber, DeliveryService, PackageWeight, PackageType: string);
+var
+  PageWidth, PageHeight: Integer;
+  MarginLeft, MarginTop: Integer;
+  CurrentY: Integer;
+  Barcode: TBarCode;
+  BarcodeBitmap: TBitmap;
+begin
+  if PrintDialog1.Execute then
+  begin
+    try
+      Printer.BeginDoc;
+
+      PageWidth := Printer.PageWidth;
+      PageHeight := Printer.PageHeight;
+      MarginLeft := 50;
+      MarginTop := 50;
+      CurrentY := MarginTop;
+
+      Printer.Canvas.Font.Name := 'Arial';
+      Printer.Canvas.Font.Size := 12;
+
+      // Rahmen zeichnen
+      Printer.Canvas.Rectangle(MarginLeft, MarginTop, PageWidth - MarginLeft,
+        PageHeight - MarginTop - 100);
+
+      // Überschrift
+      Printer.Canvas.Font.Style := [fsBold];
+      Printer.Canvas.TextOut(MarginLeft + 10, CurrentY + 10,
+        DeliveryService + '-PAKETSCHEIN (Muster)');
+      CurrentY := CurrentY + Printer.Canvas.TextHeight
+        (DeliveryService + '-PAKETSCHEIN (Muster)') + 10;
+      Printer.Canvas.Font.Style := [];
+
+      // Sendungs-ID
+      Printer.Canvas.Font.Size := 16;
+      Printer.Canvas.TextOut(MarginLeft + 10, CurrentY + 10,
+        'Sendungs-ID: ' + TrackingNumber);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight
+        ('Sendungs-ID: ' + TrackingNumber) + 20;
+      Printer.Canvas.Font.Size := 12;
+
+      // Absender
+      Printer.Canvas.TextOut(MarginLeft + 10, CurrentY + 10, 'Absender:');
+      CurrentY := CurrentY + Printer.Canvas.TextHeight('Absender:') + 5;
+      Printer.Canvas.TextOut(MarginLeft + 20, CurrentY, SenderName);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight(SenderName);
+      Printer.Canvas.TextOut(MarginLeft + 20, CurrentY, SenderAddress);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight(SenderAddress);
+      Printer.Canvas.TextOut(MarginLeft + 20, CurrentY,
+        SenderZipCode + ' ' + SenderCity);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight
+        (SenderZipCode + ' ' + SenderCity) + 20;
+
+      // Empfänger
+      Printer.Canvas.TextOut(MarginLeft + 10, CurrentY + 10, 'Empfänger:');
+      CurrentY := CurrentY + Printer.Canvas.TextHeight('Empfänger:') + 5;
+      Printer.Canvas.TextOut(MarginLeft + 20, CurrentY, RecipientName);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight(RecipientName);
+      Printer.Canvas.TextOut(MarginLeft + 20, CurrentY, RecipientAddress);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight(RecipientAddress);
+      Printer.Canvas.TextOut(MarginLeft + 20, CurrentY,
+        RecipientZipCode + ' ' + RecipientCity);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight
+        (RecipientZipCode + ' ' + RecipientCity) + 20;
+
+        // Paketdetails
+      Printer.Canvas.TextOut(MarginLeft + 10, CurrentY + 10, 'Paketdetails:');
+      CurrentY := CurrentY + Printer.Canvas.TextHeight('Paketdetails:') + 5;
+      Printer.Canvas.TextOut(MarginLeft + 20, CurrentY,
+        'Gewicht: ' + PackageWeight);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight('Gewicht: ' + PackageWeight);
+      Printer.Canvas.TextOut(MarginLeft + 20, CurrentY,
+        'Paketart: ' + PackageType);
+      CurrentY := CurrentY + Printer.Canvas.TextHeight('Paketart: ' + PackageType) + 20;
+
+      // Barcode generieren
+      Barcode := TBarCode.Create(nil);
+      try
+        Barcode.Symbology  := syCode128; // Wähle den gewünschten Barcode-Typ
+        Barcode.InputText := TrackingNumber; // Setze die zu codierenden Daten
+        Barcode.ShowText := False; // Entscheide, ob der Text unter dem Barcode angezeigt werden soll
+
+        // Barcode in ein Bitmap rendern
+        BarcodeBitmap := TBitmap.Create;
+        try
+          BarcodeBitmap.SetSize(Barcode.Width, Floor(Barcode.Height));
+
+
+          // Barcode auf dem Drucker-Canvas zeichnen
+          Printer.Canvas.Draw(MarginLeft, CurrentY, Barcode.Bitmap);
+        finally
+          BarcodeBitmap.Free;
+        end;
+      finally
+        Barcode.Free;
+      end;
+
+      Printer.EndDoc;
+    except
+      on E: Exception do
+      begin
+        Printer.Abort;
+        raise;
+      end;
+    end;
+  end;
+end;
+
+procedure TForm1.AboutClick(Sender: TObject);
+begin
+  AboutBox.Show();
+end;
+
+procedure TForm1.M_CheckForPossible;
+begin
+  if True then
+
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  SetupContact.EMPorSEN := 2;
+  SetupContact.Form2.Show();
+
+end;
+
+procedure TForm1.ButtonAbsenderKontaktSetupClick(Sender: TObject);
+begin
+  SetupContact.EMPorSEN := 1;
+  SetupContact.Form2.Show();
+
+end;
+
+procedure TForm1.ButtonPrintClick(Sender: TObject);
+var
+  TrackingNumber, DeliveryService, PackageType: string;
+  Item: TListItem;
+  i: Integer;
+  FoundCheckedItem: Boolean;
+begin
+  DeliveryService := ''; // Initialisiere DeliveryService
+  FoundCheckedItem := False;
+  for i := 0 to ListView1.Items.Count - 1 do
+  begin
+    Item := ListView1.Items[i];
+    if Item.Checked then
+    begin
+      FoundCheckedItem := True;
+      DeliveryService := Item.SubItems[0];
+      PackageType := Item.SubItems[1];
+      Break;
+    end;
+
+  end;
+
+  if not FoundCheckedItem then
+  begin
+    ShowMessage('Bitte wählen Sie einen Eintrag in der Liste aus!');
+    Exit;
+  end;
+
+  Randomize;
+  TrackingNumber := IntToStr(Random(100000000));
+
+  // Send Delivery.
+  PrintPackageSlip(EditAbsenderName.Text, EditAbsenderStraße.Text,
+    EditAbsenderPLZ.Text, EditAbsenderOrt.Text, EditEmpfaengerName.Text,
+    EditEmpfaengerStraße.Text, EditEmpfaengerPLZ.Text, EditEmpfaengerOrt.Text,
+    TrackingNumber, DeliveryService, EditGewicht.Text, PackageType);
+
+  ShowMessage('Paketschein mit Sendungs-ID: ' + TrackingNumber +
+    ' wurde zum Druck gesendet.');
+end;
+
+procedure TForm1.EditGewichtKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Key in ['0' .. '9', ',', #8]) then
+  // Allow digits, decimal separator, and backspace
+  begin
+    Key := #0; // Discard the key press
+  end
+  else if (Key = ',') and (Pos(Key, TEdit(Sender).Text) > 0) then
+  begin
+    Key := #0; // Discard if decimal separator is already present
+  end;
+end;
+
+// Visual-Func
+procedure TForm1.M_MakeItAllDisabledObject();
+begin
+  //
+  EditLaegne.Enabled := False;
+  EditBreite.Enabled := False;
+  EditHoehe.Enabled := False;
+  EditGewicht.Enabled := False;
+  CheckBoxExpress.Enabled := False;
+end;
+
+procedure TForm1.StartBTNClick(Sender: TObject);
+var
+  Laenge, Breite, Hoehe, Gewicht: Double;
+  Express, Einschreiben: Boolean;
+  LogoPfad: string;
+begin
+  // Überprüfe die Eingabefelder auf Gültigkeit (wie bisher)
+  if EditGewicht.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Das Gewicht ist ungültig.';
+    BalloonHint1.Description := 'Es müssen eine Zahl sein.';
+    BalloonHint1.ShowHint(EditGewicht);
+    Exit;
+  end;
+  if EditLaegne.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Die Länge ist ungültig.';
+    BalloonHint1.Description := 'Es müssen eine Zahl sein.';
+    BalloonHint1.ShowHint(EditLaegne);
+    Exit;
+  end;
+  if EditBreite.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Die Breite ist ungültig.';
+    BalloonHint1.Description := 'Es müssen eine Zahl sein.';
+    BalloonHint1.ShowHint(EditBreite);
+    Exit;
+  end;
+  if EditHoehe.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Die Höhe ist ungültig.';
+    BalloonHint1.Description := 'Es müssen eine Zahl sein.';
+    BalloonHint1.ShowHint(EditHoehe);
+    Exit;
+  end;
+
+  if EditAbsenderAnrede.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditAbsenderAnrede);
+    Exit;
+  end;
+  if EditAbsenderName.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditAbsenderName);
+    Exit;
+  end;
+  if EditAbsenderStraße.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditAbsenderStraße);
+    Exit;
+  end;
+  if EditAbsenderPLZ.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditAbsenderPLZ);
+    Exit;
+  end;
+  if EditAbsenderOrt.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditAbsenderOrt);
+    Exit;
+  end;
+  if EditEmpfaengerAnrede.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditEmpfaengerAnrede);
+    Exit;
+  end;
+  if EditEmpfaengerName.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditEmpfaengerName);
+    Exit;
+  end;
+  if EditEmpfaengerStraße.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditEmpfaengerStraße);
+    Exit;
+  end;
+  if EditEmpfaengerPLZ.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditEmpfaengerPLZ);
+    Exit;
+  end;
+  if EditEmpfaengerOrt.Text = EmptyStr then
+  begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditEmpfaengerOrt);
+    Exit;
+  end;
+
+  // Konvertiere die Eingabewerte
+  try
+    Gewicht := StrToFloat(EditGewicht.Text);
+    Laenge := StrToFloat(EditLaegne.Text);
+    Breite := StrToFloat(EditBreite.Text);
+    Hoehe := StrToFloat(EditHoehe.Text);
+    Express := CheckBoxExpress.Checked;
+
+    // Rufe die Prozedur auf, um die Angebote mit Logos anzuzeigen
+    ZeigePassendeAngeboteMitLogosInListView(Laenge, Breite, Hoehe, Gewicht,
+      Express, Einschreiben);
+
+  except
+    ShowMessage('Ungültige Eingabe bei den Maßen oder dem Gewicht.');
+    Exit;
+  end;
+end;
+
+procedure TForm1.VersandeinesPaktesstarten1Click(Sender: TObject);
+begin
+  //
+  EditAbsenderName.Clear;
+  EditAbsenderAnrede.Clear;
+  EditAbsenderStraße.Clear;
+  EditAbsenderAdressInfo.Clear;
+  EditAbsenderPLZ.Clear;
+  EditAbsenderOrt.Clear;
+  EditEmpfaengerName.Clear;
+  EditEmpfaengerAnrede.Clear;
+  EditEmpfaengerStraße.Clear;
+  EditEmpfaengerAdressInfo.Clear;
+  EditEmpfaengerPLZ.Clear;
+  EditEmpfaengerOrt.Clear;
+  EditLaegne.Clear;
+  EditBreite.Clear;
+  EditHoehe.Clear;
+  ListView1.Clear;
+end;
+
+procedure TForm1.M_MakeBriefEnabledObject();
+begin
+  //
+  EditLaegne.Enabled := True;
+  EditBreite.Enabled := True;
+  EditHoehe.Enabled := True;
+  EditGewicht.Enabled := True;
+  CheckBoxExpress.Enabled := False;
+end;
+
+procedure TForm1.ZeigePassendeAngeboteMitLogosInListView(L, B, H,
+  Gewicht: Double; Express, Einschreiben: Boolean);
+var
+  MeinWorker: TWorker;
+  PassendeAngebote: TList<TSendungInfo>;
+  Angebot: TSendungInfo;
+  ListItem: TListItem;
+  i: Integer;
+begin
+  MeinWorker := TWorker.Create;
+  ListView1.Clear;
+
+  // Designzeitliche ImageList zuweisen
+  ListView1.SmallImages := ImageList;
+
+  try
+    PassendeAngebote := MeinWorker.FindePassendeSendungen(L, B, H, Gewicht,
+      Express, Einschreiben);
+
+    ListView1.ViewStyle := vsReport;
+    ListView1.Columns.Clear;
+
+    with ListView1.Columns.Add do
+    begin
+      Caption := 'Logo';
+      Width := 200; // z.B. für Icons
+    end;
+
+    with ListView1.Columns.Add do
+    begin
+      Caption := 'Anbieter';
+      Width := 100;
+    end;
+
+    with ListView1.Columns.Add do
+    begin
+      Caption := 'Produkt';
+      Width := 150;
+    end;
+
+    with ListView1.Columns.Add do
+    begin
+      Caption := 'Preis (€)';
+      Width := 70;
+    end;
+
+    for i := 0 to PassendeAngebote.Count - 1 do
+    begin
+      Angebot := PassendeAngebote[i];
+      ListItem := ListView1.Items.Add;
+      ListItem.Caption := ''; // Logo
+      ListItem.SubItems.Add(Angebot.Anbieter);
+      ListItem.SubItems.Add(Angebot.ProduktName);
+      ListItem.SubItems.Add(FormatFloat('0.00', Angebot.Preis));
+
+      if Angebot.Anbieter = 'DHL' then
+        ListItem.ImageIndex := 0
+      else if Angebot.Anbieter = 'Hermes' then
+        ListItem.ImageIndex := 1
+      else if Angebot.Anbieter = 'GLS' then
+        ListItem.ImageIndex := 2;
+    end;
+
+    // Sichtbarkeit setzen
+    Label12.Visible := (ListView1.Items.Count = 0);
+
+  finally
+    PassendeAngebote.Free;
+    MeinWorker.Free;
+    // Achtung: Kein Free für ImageList1, wenn designzeitlich!
+  end;
+end;
+
+end.

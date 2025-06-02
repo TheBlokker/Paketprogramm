@@ -186,8 +186,7 @@
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp290.bpl">Microsoft Office XP Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
-            <Deployment Version="5">
-                <DeployFile LocalName="Win32\Debug\Paket.exe" Configuration="Debug" Class="ProjectOutput"/>
+            <Deployment Version="4">
                 <DeployFile LocalName="Win32\Debug\Paket.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="Win32\Debug\Paket.rsm" Configuration="Debug" Class="DebugSymbols"/>
                 <DeployFile LocalName="anbieter.json" Configuration="Debug" Class="ProjectFile"/>
@@ -201,6 +200,16 @@
                     </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidClasses">
+                    <Platform Name="Android">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>64</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>64</Operation>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="AndroidFileProvider">

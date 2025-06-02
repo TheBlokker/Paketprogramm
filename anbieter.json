@@ -77,7 +77,7 @@
       },
       "max_gewicht_g": 10000,
       "optionen": {
-        "express":  18.01
+        "express": 18.01
       }
     },
     {
@@ -93,7 +93,7 @@
       },
       "max_gewicht_g": 20000,
       "optionen": {
-        "express":  15.01
+        "express": 15.01
       }
     },
     {
@@ -109,7 +109,7 @@
       },
       "max_gewicht_g": 31500,
       "optionen": {
-        "express":  36.49
+        "express": 36.49
       }
     },
     {
@@ -280,6 +280,91 @@
       "max_summe_laengste_kuerzeste": 300,
       "optionen": {
         "express": 0
+      }
+    },
+    {
+      "anbieter": "DPD",
+      "name": "XS",
+      "preis_euro": 3.49,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 175,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_summe_laengste_kuerzeste": 35,
+      "max_gewicht_g": 31500,
+      "optionen": {
+        "express": 13.51
+      }
+    },
+    {
+      "anbieter": "DPD",
+      "name": "S",
+      "preis_euro": 3.99,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 175,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_summe_laengste_kuerzeste": 50,
+      "max_gewicht_g": 31500,
+      "optionen": {
+        "express": 13.01
+      }
+    },
+    {
+      "anbieter": "DPD",
+      "name": "M",
+      "preis_euro": 5.69,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 175,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_summe_laengste_kuerzeste": 70,
+      "max_gewicht_g": 31500,
+      "optionen": {
+        "express": 11.31
+      }
+    },
+    {
+      "anbieter": "DPD",
+      "name": "L",
+      "preis_euro": 10.69,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 175,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_summe_laengste_kuerzeste": 90,
+      "max_gewicht_g": 31500,
+      "optionen": {
+        "express": 6.31
+      }
+    },
+    {
+      "anbieter": "DPD",
+      "name": "XL",
+      "preis_euro": 25.50,
+      "mass_cm": {
+        "laenge_min": 0,
+        "laenge_max": 175,
+        "breite_min": 0,
+        "breite_max": 60,
+        "hoehe_max": 60
+      },
+      "max_summe_laengste_kuerzeste": 300,
+      "max_gewicht_g": 31500,
+      "optionen": {
+        "express": 8.50
       }
     }
   ]

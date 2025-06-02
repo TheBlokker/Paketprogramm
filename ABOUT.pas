@@ -16,6 +16,7 @@ type
     OKButton: TButton;
     Label1: TLabel;
     Label2: TLabel;
+    Label3: TLabel;
     procedure OKButtonClick(Sender: TObject);
   private
     { Private-Deklarationen }

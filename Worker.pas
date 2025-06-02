@@ -57,19 +57,19 @@ begin
     MaxGewicht := Sendung.GetValue<Double>('max_gewicht_g');
     Preis := Sendung.GetValue<Double>('preis_euro');
 
-    if Express then
+    // Überprüfung auf FindValue anstatt von einfachen reinlesen.
+    if Express and (Optionen.FindValue('express') <> nil) then
       Preis := Preis + Optionen.GetValue<Double>('express');
 
-    if Einschreiben then
-      Preis := Preis + Optionen.GetValue<Double>('einschreiben');
 
     // Wenn Anbieter Hermes/GLS ist, berücksichtige nur die längste und kürzeste Seite
-    if (Anbieter = 'Hermes') or (Anbieter = 'GLS') then
+    if (Anbieter = 'Hermes') or (Anbieter = 'GLS') or (Anbieter = 'DPD') then
     begin
       // Bestimme die größte und kleinste Seite
       Seiten := [L, B, H];
       MinSeite := Min(Min(Seiten[0], Seiten[1]), Seiten[2]);
       MaxSeite := Max(Max(Seiten[0], Seiten[1]), Seiten[2]);
+      SummeLaengsteKuerzeste:= MinSeite + MaxSeite;
 
       // Vergleiche mit den erlaubten Maßen
       if (SummeLaengsteKuerzeste <= Sendung.GetValue<Double>('max_summe_laengste_kuerzeste')) and (Gewicht <= MaxGewicht) then
