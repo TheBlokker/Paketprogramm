@@ -23,6 +23,7 @@ type
     EditAbsenderAnrede: TEdit;
     GroupBox2: TGroupBox;
     EditAbsenderStraße: TEdit;
+    EditAbsenderStraße: TEdit;
     EditAbsenderAdressInfo: TEdit;
     EditAbsenderPLZ: TEdit;
     EditAbsenderOrt: TEdit;
@@ -31,6 +32,7 @@ type
     EditEmpfaengerName: TEdit;
     EditEmpfaengerOrt: TEdit;
     EditEmpfaengerPLZ: TEdit;
+    EditEmpfaengerStraße: TEdit;
     EditEmpfaengerStraße: TEdit;
     ComboBox1: TComboBox;
     ComboBox2: TComboBox;
@@ -121,10 +123,13 @@ begin
       Printer.Canvas.Font.Name := 'Arial';
       Printer.Canvas.Font.Size := 12;
 
+      // Rahmen zeichnen (vereinfacht)
+      Printer.Canvas.Rectangle(MarginLeft, MarginTop, PageWidth - MarginLeft, PageHeight - MarginTop - 100); // Platz für den unteren Barcode
       // Rahmen zeichnen
       Printer.Canvas.Rectangle(MarginLeft, MarginTop, PageWidth - MarginLeft,
         PageHeight - MarginTop - 100);
 
+      // Überschrift
       // Überschrift
       Printer.Canvas.Font.Style := [fsBold];
       Printer.Canvas.TextOut(MarginLeft + 10, CurrentY + 10,
@@ -153,6 +158,16 @@ begin
       CurrentY := CurrentY + Printer.Canvas.TextHeight
         (SenderZipCode + ' ' + SenderCity) + 20;
 
+      // Empfänger
+      Printer.Canvas.TextOut(MarginLeft + (PageWidth - 2 * MarginLeft) div 2 + 10, MarginTop + 50, 'Empfänger:');
+      Printer.Canvas.Font.Size := 12;
+      Printer.Canvas.TextOut(MarginLeft + (PageWidth - 2 * MarginLeft) div 2 + 20, MarginTop + 50 + Printer.Canvas.TextHeight('Empfänger:') + 5, RecipientName);
+      Printer.Canvas.TextOut(MarginLeft + (PageWidth - 2 * MarginLeft) div 2 + 20, MarginTop + 50 + Printer.Canvas.TextHeight('Empfänger:') + 5 + Printer.Canvas.TextHeight(RecipientName), RecipientAddress);
+      Printer.Canvas.TextOut(MarginLeft + (PageWidth - 2 * MarginLeft) div 2 + 20, MarginTop + 50 + Printer.Canvas.TextHeight('Empfänger:') + 5 + Printer.Canvas.TextHeight(RecipientName) + Printer.Canvas.TextHeight(RecipientAddress), RecipientZipCode + ' ' + RecipientCity);
+
+      // Hier müsstest du die Barcode-Generierung und das Zeichnen des Barcodes implementieren
+      Printer.Canvas.Font.Size := 10;
+      Printer.Canvas.TextOut(MarginLeft + 10, PageHeight - MarginTop - 80, 'Barcode hier (Sendungs-ID: ' + TrackingNumber + ')');
       // Empfänger
       Printer.Canvas.TextOut(MarginLeft + 10, CurrentY + 10, 'Empfänger:');
       CurrentY := CurrentY + Printer.Canvas.TextHeight('Empfänger:') + 5;
@@ -239,11 +254,18 @@ begin
   if not FoundCheckedItem then
   begin
     ShowMessage('Bitte wählen Sie einen Eintrag in der Liste aus!');
+    ShowMessage('Bitte wählen Sie einen Eintrag in der Liste aus!');
     Exit;
   end;
 
   Randomize;
   TrackingNumber := IntToStr(Random(100000000));
+
+  //  Send Delivery.
+  PrintPackageSlip(
+    EditAbsenderName.Text, EditAbsenderStraße.Text, EditAbsenderPLZ.Text, EditAbsenderOrt.Text,
+    EditEmpfaengerName.Text, EditEmpfaengerStraße.Text, EditEmpfaengerPLZ.Text, EditEmpfaengerOrt.Text,
+    TrackingNumber, DeliveryService);
 
   // Send Delivery.
   PrintPackageSlip(EditAbsenderName.Text, EditAbsenderStraße.Text,
@@ -291,8 +313,11 @@ var
   LogoPfad: string;
 begin
   // Überprüfe die Eingabefelder auf Gültigkeit (wie bisher)
+  // Überprüfe die Eingabefelder auf Gültigkeit (wie bisher)
   if EditGewicht.Text = EmptyStr then
   begin
+    BalloonHint1.Title := 'Das Gewicht ist ungültig.';
+    BalloonHint1.Description := 'Es müssen eine Zahl sein.';
     BalloonHint1.Title := 'Das Gewicht ist ungültig.';
     BalloonHint1.Description := 'Es müssen eine Zahl sein.';
     BalloonHint1.ShowHint(EditGewicht);
@@ -302,6 +327,8 @@ begin
   begin
     BalloonHint1.Title := 'Die Länge ist ungültig.';
     BalloonHint1.Description := 'Es müssen eine Zahl sein.';
+    BalloonHint1.Title := 'Die Länge ist ungültig.';
+    BalloonHint1.Description := 'Es müssen eine Zahl sein.';
     BalloonHint1.ShowHint(EditLaegne);
     Exit;
   end;
@@ -309,11 +336,15 @@ begin
   begin
     BalloonHint1.Title := 'Die Breite ist ungültig.';
     BalloonHint1.Description := 'Es müssen eine Zahl sein.';
+    BalloonHint1.Title := 'Die Breite ist ungültig.';
+    BalloonHint1.Description := 'Es müssen eine Zahl sein.';
     BalloonHint1.ShowHint(EditBreite);
     Exit;
   end;
   if EditHoehe.Text = EmptyStr then
   begin
+    BalloonHint1.Title := 'Die Höhe ist ungültig.';
+    BalloonHint1.Description := 'Es müssen eine Zahl sein.';
     BalloonHint1.Title := 'Die Höhe ist ungültig.';
     BalloonHint1.Description := 'Es müssen eine Zahl sein.';
     BalloonHint1.ShowHint(EditHoehe);
@@ -324,6 +355,8 @@ begin
   begin
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditAbsenderAnrede);
     Exit;
   end;
@@ -331,11 +364,17 @@ begin
   begin
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditAbsenderName);
     Exit;
   end;
   if EditAbsenderStraße.Text = EmptyStr then
+  if EditAbsenderStraße.Text = EmptyStr then
   begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditAbsenderStraße);
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditAbsenderStraße);
@@ -345,11 +384,15 @@ begin
   begin
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditAbsenderPLZ);
     Exit;
   end;
   if EditAbsenderOrt.Text = EmptyStr then
   begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditAbsenderOrt);
@@ -359,6 +402,8 @@ begin
   begin
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditEmpfaengerAnrede);
     Exit;
   end;
@@ -366,11 +411,17 @@ begin
   begin
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditEmpfaengerName);
     Exit;
   end;
   if EditEmpfaengerStraße.Text = EmptyStr then
+  if EditEmpfaengerStraße.Text = EmptyStr then
   begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.ShowHint(EditEmpfaengerStraße);
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditEmpfaengerStraße);
@@ -380,11 +431,15 @@ begin
   begin
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditEmpfaengerPLZ);
     Exit;
   end;
   if EditEmpfaengerOrt.Text = EmptyStr then
   begin
+    BalloonHint1.Title := 'Ungültig';
+    BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.Title := 'Ungültig';
     BalloonHint1.Description := 'Sie müssen hier etwas eintragen';
     BalloonHint1.ShowHint(EditEmpfaengerOrt);
@@ -399,11 +454,14 @@ begin
     Hoehe := StrToFloat(EditHoehe.Text);
     Express := CheckBoxExpress.Checked;
 
+
+
     // Rufe die Prozedur auf, um die Angebote mit Logos anzuzeigen
     ZeigePassendeAngeboteMitLogosInListView(Laenge, Breite, Hoehe, Gewicht,
       Express, Einschreiben);
 
   except
+    ShowMessage('Ungültige Eingabe bei den Maßen oder dem Gewicht.');
     ShowMessage('Ungültige Eingabe bei den Maßen oder dem Gewicht.');
     Exit;
   end;
@@ -415,11 +473,13 @@ begin
   EditAbsenderName.Clear;
   EditAbsenderAnrede.Clear;
   EditAbsenderStraße.Clear;
+  EditAbsenderStraße.Clear;
   EditAbsenderAdressInfo.Clear;
   EditAbsenderPLZ.Clear;
   EditAbsenderOrt.Clear;
   EditEmpfaengerName.Clear;
   EditEmpfaengerAnrede.Clear;
+  EditEmpfaengerStraße.Clear;
   EditEmpfaengerStraße.Clear;
   EditEmpfaengerAdressInfo.Clear;
   EditEmpfaengerPLZ.Clear;
@@ -456,6 +516,14 @@ begin
   ListView1.SmallImages := ImageList;
 
   try
+    PassendeAngebote := MeinWorker.FindePassendeSendungen(L, B, H, Gewicht, Express, Einschreiben);
+    ListView1.Clear;
+    ListView1.Columns.Clear;
+
+    ListView1.Columns.Add.Caption := 'Logo'; // Spalte für das Logo
+    ListView1.Columns.Add.Caption := 'Anbieter';
+    ListView1.Columns.Add.Caption := 'Produkt';
+    ListView1.Columns.Add.Caption := 'Preis ()';
     PassendeAngebote := MeinWorker.FindePassendeSendungen(L, B, H, Gewicht,
       Express, Einschreiben);
 
@@ -490,6 +558,7 @@ begin
     begin
       Angebot := PassendeAngebote[i];
       ListItem := ListView1.Items.Add;
+      ListItem.Caption := ''; // Platzhalter für das Logo in der ersten Spalte
       ListItem.Caption := ''; // Logo
       ListItem.SubItems.Add(Angebot.Anbieter);
       ListItem.SubItems.Add(Angebot.ProduktName);
